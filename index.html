@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ResQ - Emergency Continuity Demo</title>
+<link rel="stylesheet" href="style.css"></head><body>
+<header><b>🚑 ResQ</b><nav><button onclick="show('pub')">Public</button><button id="navLogin" onclick="show('login')">Personnel login</button><button id="navDash" onclick="goDash()" hidden>My dashboard</button><button id="navOut" onclick="logout()" hidden>Log out</button><button onclick="resetAll()">Reset demo</button></nav></header>
+<main>
+
+<section id="pub" class="page on">
+ <div class="card"><h1>Help should reach you, even when the network does not.</h1>
+ <p class="m">Student demo. In a real emergency call 108. This project supports 108 and does not replace it.</p>
+ <button class="sos" id="sosBtn" onclick="sos()">SEND SOS</button><a class="call" href="tel:108">Call 108</a><p id="sosMsg" class="ok"></p>
+ <p class="m">Dispatch is automatic: the system picks the nearest ambulance and best hospital, then traffic police clear the route.</p></div>
+ <div class="grid">
+  <div class="card"><h3>1. Incident location and live traffic</h3><p class="m">Tap the map to place the emergency. GPS is also captured if your browser allows it.</p><div id="pubMap" class="map"></div><div id="pubLeg"></div><p id="gps" class="m"></p></div>
+  <div class="card"><h3>2. Crash simulator (stands in for ESP32 + MPU6050)</h3>
+   <label for="simG">Impact strength: <b id="gv">5</b> g</label><input type="range" id="simG" min="0" max="10" value="5" oninput="$('gv').textContent=this.value">
+   <label><input type="checkbox" id="simStop"> Vehicle stopped after impact</label>
+   <label><input type="checkbox" id="simTilt"> Vehicle tilted or rolled over</label><br>
+   <button class="d" onclick="startSim()">Simulate crash</button> <button class="g" onclick="imOk()">I'm OK</button>
+   <p id="simOut" class="m">The device waits 10 s for "I'm OK". If nobody answers, the alert is graded and sent.</p></div>
+ </div>
+ <div class="grid">
+  <div class="card"><h3>3. Track a request (two-way confirmation)</h3><input id="tid" aria-label="Request ID" placeholder="Example: RSQ-1001"><button class="p" onclick="track()">Track request</button><div id="trackOut"></div></div>
+  <div class="card"><h3>4. Send an update to the response team</h3><select id="pSel" aria-label="Your request"></select>
+   <select id="pType" aria-label="Update type"><option>Patient transported by another vehicle</option><option>Emergency assistance no longer required</option><option>Pickup location changed</option><option>Other emergency update</option></select>
+   <textarea id="pMsg" rows="2" aria-label="Details" placeholder="Optional details"></textarea><button class="p" onclick="sendUp()">Send update</button> <span id="upMsg" class="ok"></span></div>
+ </div>
+ <div class="card"><h3>Requests from this device</h3><div id="hist"><p class="m">No requests yet.</p></div></div>
+</section>
+
+<section id="login" class="page"><div class="card" style="max-width:420px;margin:auto"><h2>Personnel login</h2>
+ <form onsubmit="login(event)"><label for="uid">Personnel ID</label><input id="uid" autocomplete="username" required><label for="pw">Password</label><input id="pw" type="password" autocomplete="current-password" required><button class="p" style="width:100%">Log in</button><p id="lmsg" class="bad"></p></form>
+ <p class="m"><b>Demo logins</b> (password demo123)<br>Traffic police: TRF-001<br>Ambulance driver: DRV-001<br>Hospital staff: HST-001</p></div></section>
+
+<section id="trf" class="page"><h2>Traffic police dashboard</h2><div id="trfBody"></div></section>
+<section id="amb" class="page"><h2>Ambulance dashboard</h2><div id="ambBody"></div></section>
+<section id="hos" class="page"><h2>Hospital dashboard</h2><div id="hosBody"></div></section>
+</main>
+
+<script src="script.js"></script></body></html>
